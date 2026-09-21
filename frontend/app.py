@@ -41,6 +41,19 @@ code, pre, .stCodeBlock {
     font-family: 'JetBrains Mono', monospace !important;
 }
 
+/* Hide Streamlit Header, Deploy Button, Menu, and Footer */
+#MainMenu { visibility: hidden !important; display: none !important; }
+header, header[data-testid="stHeader"] { visibility: hidden !important; display: none !important; height: 0 !important; }
+[data-testid="stDeployButton"], .stDeployButton { visibility: hidden !important; display: none !important; }
+[data-testid="stToolbar"] { visibility: hidden !important; display: none !important; }
+#stDecoration { display: none !important; }
+footer { visibility: hidden !important; display: none !important; }
+
+/* Optimize Top Spacing */
+.block-container {
+    padding-top: 2rem !important;
+}
+
 /* Main Title */
 .main-title {
     font-size: 34px;
@@ -52,6 +65,7 @@ code, pre, .stCodeBlock {
     margin: 0 0 16px 0;
     padding: 0;
 }
+
 
 /* Clean UI Buttons */
 .stButton button {
