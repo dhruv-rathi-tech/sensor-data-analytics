@@ -27,110 +27,100 @@ if "sql_query" not in st.session_state:
     st.session_state["sql_query"] = "SELECT * FROM processed_data LIMIT 10"
 if "last_df" not in st.session_state:
     st.session_state["last_df"] = None
-if "splash_shown" not in st.session_state:
-    st.session_state["splash_shown"] = True
-    time.sleep(1.2)
-
-# --- SPLASH SCREEN AND THEME STYLING ---
+# --- MODERN ENTERPRISE STYLING ---
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Orbitron:wght@600;800&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
-#splash-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #0b0c10, #1f2833);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 99999;
-    color: #66fcf1;
-    font-family: 'Anton', sans-serif;
-    font-size: 64px;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    text-shadow: 0 0 20px rgba(102, 252, 241, 0.6), 2px 2px 6px #ffcc00;
-    animation: liftUp 0.8s ease-out forwards, fadeOut 0.5s ease forwards 1.2s;
-    pointer-events: none;
+html, body, [class*="css"], .stApp {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-@keyframes liftUp {
-    0% { transform: translateY(30px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
+code, pre, .stCodeBlock {
+    font-family: 'JetBrains Mono', monospace !important;
 }
 
-@keyframes fadeOut {
-    0% { opacity: 1; }
-    100% { opacity: 0; display: none; visibility: hidden; }
-}
-
-/* Header Box */
+/* Header Container */
 .header-box {
-    background: linear-gradient(135deg, #111422, #1f2538 50%, #2b1b3d);
-    padding: 24px 20px;
-    border-radius: 14px;
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    padding: 28px 24px;
+    border-radius: 12px;
     text-align: center;
-    border: 1px solid rgba(102, 252, 241, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    border: 1px solid #334155;
+    box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.3);
     margin-bottom: 24px;
-    animation: zoomIn 1s ease-out forwards;
 }
 
-@keyframes zoomIn {
-    0% { transform: scale(0.95); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
+.project-badge {
+    display: inline-block;
+    background: rgba(56, 189, 248, 0.1);
+    color: #38bdf8;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    margin-bottom: 10px;
 }
 
 .project-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 42px;
+    font-size: 32px;
     font-weight: 800;
-    color: #66fcf1;
-    text-shadow: 0 0 15px rgba(102, 252, 241, 0.5), 2px 2px 8px #000000;
-    margin-bottom: 8px;
-    letter-spacing: 2px;
+    color: #f8fafc;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
 }
 
 .project-sub {
-    font-size: 15px;
-    margin: 3px 0;
-    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #94a3b8;
+    margin: 4px 0;
 }
 
-.label-text { color: #c5c6c7; font-weight: 600; }
-.name-text { color: #ffd166; font-weight: 700; }
-.id-text { color: #ffffff; font-weight: 500; }
-.faculty-text { color: #06d6a0; font-weight: 700; }
+.label-text { color: #64748b; font-weight: 600; }
+.name-text { color: #f1f5f9; font-weight: 600; }
+.id-text { color: #38bdf8; font-weight: 600; }
+.faculty-text { color: #34d399; font-weight: 600; }
 
-/* Custom Buttons */
+/* Clean UI Buttons */
 .stButton button {
-    background: linear-gradient(135deg, #1f2833, #0b0c10);
-    color: #66fcf1;
-    border: 1px solid #45a29e;
-    font-weight: 600;
-    border-radius: 8px;
-    transition: all 0.2s ease-in-out;
+    background-color: #1e293b;
+    color: #f1f5f9;
+    border: 1px solid #334155;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.15s ease;
 }
 .stButton button:hover {
-    background: linear-gradient(135deg, #45a29e, #66fcf1);
-    color: #0b0c10;
-    border-color: #66fcf1;
-    box-shadow: 0 0 12px rgba(102, 252, 241, 0.5);
+    background-color: #334155;
+    border-color: #475569;
+    color: #ffffff;
+}
+.stButton button[kind="primary"] {
+    background-color: #0284c7;
+    border-color: #0369a1;
+    color: #ffffff;
+}
+.stButton button[kind="primary"]:hover {
+    background-color: #0369a1;
+    border-color: #075985;
 }
 </style>
 
-<div id="splash-screen">DATA VISUALISATION</div>
-
 <div class="header-box">
-    <div class="project-title">SENSORLENS — DBMS PROJECT</div>
-    <p class="project-sub"><span class="label-text">Done by:</span></p>
-    <p class="project-sub"><span class="name-text">Aman Gupta</span> — <span class="id-text">23BLC1161</span> &nbsp;|&nbsp; <span class="name-text">Dhruv Rathi</span> — <span class="id-text">23BLC1164</span></p>
+    <div class="project-badge">DBMS Analytics Platform</div>
+    <div class="project-title">SensorLens</div>
+    <p class="project-sub"><span class="label-text">Developed by:</span></p>
+    <p class="project-sub">
+        <span class="name-text">Aman Gupta</span> (<span class="id-text">23BLC1161</span>)
+        &nbsp;•&nbsp;
+        <span class="name-text">Dhruv Rathi</span> (<span class="id-text">23BLC1164</span>)
+    </p>
     <p class="project-sub"><span class="label-text">Submitted to —</span> <span class="faculty-text">Dr. Sobitha Ahila</span></p>
 </div>
+
 """, unsafe_allow_html=True)
 
 
