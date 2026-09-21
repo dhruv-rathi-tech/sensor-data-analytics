@@ -1,13 +1,19 @@
 import json
+import sys
 import time
 from pathlib import Path
 import pandas as pd
 import streamlit as st
-from backend.database import get_connection
 
 BASE_DIR = Path(__file__).resolve().parents[1]
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
+
+from backend.database import get_connection
+
 DATA_FILE = BASE_DIR / "data" / "processed" / "sensor_readings_clean.csv"
 QUALITY_FILE = BASE_DIR / "reports" / "data_quality_report.json"
+
 
 st.set_page_config(
     page_title="SensorLens — DBMS Project",
