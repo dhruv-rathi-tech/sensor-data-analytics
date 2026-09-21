@@ -202,8 +202,6 @@ QUERY_SHORTCUTS = {
 }
 
 with st.sidebar:
-    st.link_button("🚀 Deploy to Streamlit Cloud", DEPLOY_URL, use_container_width=True)
-    st.divider()
     st.header("📌 Query Shortcuts")
     st.caption("Click any shortcut to load into the SQL console:")
     for label, query in QUERY_SHORTCUTS.items():
@@ -328,8 +326,7 @@ with tab_analytics:
 # TAB 3: DATA QUALITY & AUDIT
 # ==========================================
 with tab_quality:
-    st.subheader("🛡️ Data Quality Audit")
-    st.caption("Verification and audit metrics generated from raw dataset ingestion and validation pipeline.")
+    st.subheader("Data Quality Audit")
 
     q1, q2, q3, q4 = st.columns(4)
     q1.metric("Quality Score", f"{quality['quality_score_pct']:.2f}%")
