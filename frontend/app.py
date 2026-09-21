@@ -41,18 +41,31 @@ code, pre, .stCodeBlock {
     font-family: 'JetBrains Mono', monospace !important;
 }
 
-/* Hide Streamlit Header, Deploy Button, Menu, and Footer */
+/* Keep Deploy Button visible, hide 3-dots Menu, Toolbar, and Footer */
 #MainMenu { visibility: hidden !important; display: none !important; }
-header, header[data-testid="stHeader"] { visibility: hidden !important; display: none !important; height: 0 !important; }
-[data-testid="stDeployButton"], .stDeployButton { visibility: hidden !important; display: none !important; }
-[data-testid="stToolbar"] { visibility: hidden !important; display: none !important; }
+header button[data-testid="baseButton-headerNoPadding"] { display: none !important; }
+header button[aria-label="Main menu"] { display: none !important; }
+header button[title="More options"] { display: none !important; }
+[data-testid="stHeaderActionElements"] > button:not(:has([data-testid="stDeployButton"])) { display: none !important; }
+[data-testid="stToolbar"] button:not(:has([data-testid="stDeployButton"])) { display: none !important; }
+
+[data-testid="stDeployButton"], .stDeployButton {
+    display: inline-flex !important;
+    visibility: visible !important;
+}
+
+header[data-testid="stHeader"] {
+    background: transparent !important;
+}
+
 #stDecoration { display: none !important; }
 footer { visibility: hidden !important; display: none !important; }
 
-/* Optimize Top Spacing */
+/* Top Spacing */
 .block-container {
-    padding-top: 2rem !important;
+    padding-top: 3.5rem !important;
 }
+
 
 /* Main Title */
 .main-title {
