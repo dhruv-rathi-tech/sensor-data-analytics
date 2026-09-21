@@ -16,7 +16,7 @@ QUALITY_FILE = BASE_DIR / "reports" / "data_quality_report.json"
 
 
 st.set_page_config(
-    page_title="SensorLens — DBMS Project",
+    page_title="SensorLens — Sensor Data Analytics Platform",
     page_icon="📡",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -27,6 +27,7 @@ if "sql_query" not in st.session_state:
     st.session_state["sql_query"] = "SELECT * FROM processed_data LIMIT 10"
 if "last_df" not in st.session_state:
     st.session_state["last_df"] = None
+
 # --- MODERN ENTERPRISE STYLING ---
 st.markdown("""
 <style>
@@ -70,7 +71,7 @@ code, pre, .stCodeBlock {
     font-weight: 800;
     color: #f8fafc;
     letter-spacing: -0.5px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .project-sub {
@@ -78,11 +79,6 @@ code, pre, .stCodeBlock {
     color: #94a3b8;
     margin: 4px 0;
 }
-
-.label-text { color: #64748b; font-weight: 600; }
-.name-text { color: #f1f5f9; font-weight: 600; }
-.id-text { color: #38bdf8; font-weight: 600; }
-.faculty-text { color: #34d399; font-weight: 600; }
 
 /* Clean UI Buttons */
 .stButton button {
@@ -110,16 +106,11 @@ code, pre, .stCodeBlock {
 </style>
 
 <div class="header-box">
-    <div class="project-badge">DBMS Analytics Platform</div>
-    <div class="project-title">SensorLens</div>
-    <p class="project-sub"><span class="label-text">Developed by:</span></p>
-    <p class="project-sub">
-        <span class="name-text">Aman Gupta</span> (<span class="id-text">23BLC1161</span>)
-        &nbsp;•&nbsp;
-        <span class="name-text">Dhruv Rathi</span> (<span class="id-text">23BLC1164</span>)
-    </p>
-    <p class="project-sub"><span class="label-text">Submitted to —</span> <span class="faculty-text">Dr. Sobitha Ahila</span></p>
+    <div class="project-badge">Sensor Data Analytics Platform</div>
+    <div class="project-title">📡 SensorLens</div>
+    <p class="project-sub">ETL Pipeline • MySQL Relational Analytics • Interactive Streamlit Reporting</p>
 </div>
+
 
 """, unsafe_allow_html=True)
 
