@@ -13,6 +13,22 @@ from backend.database import get_connection
 
 DATA_FILE = BASE_DIR / "data" / "processed" / "sensor_readings_clean.csv"
 QUALITY_FILE = BASE_DIR / "reports" / "data_quality_report.json"
+DEPLOY_URL = "https://share.streamlit.io/deploy?repository=dhruv-rathi-tech/sensor-data-analytics&branch=main&mainModule=frontend/app.py"
+
+# Normalize Git module path on Windows to avoid backslash issues with Streamlit Cloud
+try:
+    from streamlit import git_util
+    _orig_get_repo_info = git_util.GitRepo.get_repo_info
+    def _patched_get_repo_info(self):
+        res = _orig_get_repo_info(self)
+        if res:
+            repo, branch, module = res
+            return repo, branch, module.replace("\\", "/")
+        return res
+    git_util.GitRepo.get_repo_info = _patched_get_repo_info
+except Exception:
+    pass
+
 
 
 st.set_page_config(
@@ -132,8 +148,28 @@ header[data-testid="stHeader"] {
 
 <h1 class="main-title">SensorLens</h1>
 
-
 """, unsafe_allow_html=True)
+
+# Deploy button handler: direct link to Community Cloud deployment
+st.html(f"""
+<script>
+(function() {{
+    const targetUrl = "{DEPLOY_URL}";
+    function onDeployClick(e) {{
+        const btn = e.target.closest('[data-testid="stAppDeployButton"], .stAppDeployButton, [data-testid="stDeployButton"]');
+        const text = (e.target.innerText || e.target.textContent || '').trim();
+        if (btn || text === 'Deploy now' || (text === 'Try again' && e.target.closest('[role="dialog"]'))) {{
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            window.open(targetUrl, '_blank');
+            return false;
+        }}
+    }}
+    document.addEventListener('click', onDeployClick, true);
+}})();
+</script>
+""", unsafe_allow_javascript=True)
 
 
 @st.cache_data
@@ -166,6 +202,8 @@ QUERY_SHORTCUTS = {
 }
 
 with st.sidebar:
+    st.link_button("🚀 Deploy to Streamlit Cloud", DEPLOY_URL, use_container_width=True)
+    st.divider()
     st.header("📌 Query Shortcuts")
     st.caption("Click any shortcut to load into the SQL console:")
     for label, query in QUERY_SHORTCUTS.items():
