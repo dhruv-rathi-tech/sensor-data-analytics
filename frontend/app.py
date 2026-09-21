@@ -41,43 +41,16 @@ code, pre, .stCodeBlock {
     font-family: 'JetBrains Mono', monospace !important;
 }
 
-/* Header Container */
-.header-box {
-    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-    padding: 28px 24px;
-    border-radius: 12px;
-    text-align: center;
-    border: 1px solid #334155;
-    box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.3);
-    margin-bottom: 24px;
-}
-
-.project-badge {
-    display: inline-block;
-    background: rgba(56, 189, 248, 0.1);
-    color: #38bdf8;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 9999px;
-    border: 1px solid rgba(56, 189, 248, 0.25);
-    margin-bottom: 10px;
-}
-
-.project-title {
-    font-size: 32px;
+/* Main Title */
+.main-title {
+    font-size: 34px;
     font-weight: 800;
-    color: #f8fafc;
-    letter-spacing: -0.5px;
-    margin-bottom: 8px;
-}
-
-.project-sub {
-    font-size: 14px;
-    color: #94a3b8;
-    margin: 4px 0;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 0 16px 0;
+    padding: 0;
 }
 
 /* Clean UI Buttons */
@@ -105,10 +78,8 @@ code, pre, .stCodeBlock {
 }
 </style>
 
-<div class="header-box">
-    <div class="project-title">SensorLens</div>
-    <p class="project-sub">Sensor Data Analytics Platform</p>
-</div>
+<h1 class="main-title">SensorLens</h1>
+
 
 """, unsafe_allow_html=True)
 
