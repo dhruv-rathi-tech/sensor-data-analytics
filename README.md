@@ -1,88 +1,125 @@
 # SensorLens — Sensor Data Analytics Platform
 
-An interview-ready sensor data analytics platform that turns raw smart-home sensor readings into a validated dataset, relational MySQL tables, advanced SQL analytics, and an interactive Streamlit dashboard.
+**SensorLens** is an end-to-end IoT sensor data analytics and operational monitoring platform. It ingests raw telemetry readings from smart-home environmental and motion sensors, performs automated data cleansing and schema validation, loads structured data into a relational MySQL store, and delivers real-time operational insights through interactive dashboards and a live SQL query console.
 
-## What this project demonstrates
+---
 
-- Python data extraction, cleansing, transformation and validation
-- ETL pipeline with rejected-record logging and quality reporting
-- Relational database design in MySQL with primary/foreign keys, checks, and indexes
-- SQL analytics using joins, CTEs, subqueries, CASE, window functions and views
-- Rule-based anomaly detection using configurable temperature/humidity thresholds
-- Interactive Streamlit KPIs, filters, trends, sensor activity and exports
+## Key Features
 
-## Architecture
+- **Automated Data Processing Pipeline (ETL)**: Cleanses and transforms raw multi-sensor telemetry, normalizes timestamps, enforces strict domain validation rules, and logs malformed/rejected records with granular rejection reasons.
+- **Relational Data Architecture (MySQL 8.0)**: Normalized relational schema (`sensors`, `sensor_readings`) equipped with primary keys, foreign key constraints, value range checks (`temperature`, `humidity`), and composite time-series indexes for query optimization.
+- **Advanced SQL Analytical Engine**: Implements complex analytical queries utilizing Common Table Expressions (CTEs), window functions (`DENSE_RANK`, `LAG`, running window frames), conditional aggregation (`CASE`), and analytical database views.
+- **Interactive Web Interface (Streamlit)**:
+  - **SQL Query Console**: Execute ad-hoc queries with execution timers, pre-built shortcuts, and CSV exports.
+  - **Operational Telemetry Dashboard**: Real-time KPI scorecard, temperature/humidity trend charts, sensor activity distribution, and rule-based anomaly detection.
+  - **Data Quality & Audit Console**: Transparent pipeline audit reporting, failure classification breakdown, and rejected record inspection.
+
+---
+
+## System Architecture
 
 ```text
-Raw CSV
-   ↓
-Python Extract
-   ↓
-Transform + Normalize
-   ↓
-Validation + Data Quality
-   ↓
-Clean CSV + Rejected Records
-   ↓
-MySQL Relational Database
-   ↓
-Advanced SQL / Views
-   ↓
-Streamlit Analytics Dashboard (SensorLens)
+┌─────────────────┐
+│   Raw Telemetry │ (data/raw/dataset.csv)
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  Python Extract │ (backend/etl/extract.py)
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ Transform/Parse │ (backend/etl/transform.py)
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ Validation/DQ   │ (backend/etl/validate.py)
+└────────┬────────┘
+         ├───► [Rejected Records Log] (data/processed/rejected_records.csv)
+         ├───► [Quality Audit Report] (reports/data_quality_report.json)
+         │
+         ▼
+┌─────────────────┐
+│ Clean Datasets  │ (data/processed/sensor_readings_clean.csv)
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  MySQL Database │ (`sensorlens_db` - Tables, Views, Indexes)
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ Streamlit UI    │ (Interactive SQL Console + Visual Dashboards)
+└─────────────────┘
 ```
 
-## Project structure
+---
+
+## Project Structure
 
 ```text
 .
 ├── backend/
-│   ├── database.py
-│   ├── preprocessing.py
+│   ├── database.py                 # MySQL connection pooling, DDL execution, and bulk loader
+│   ├── preprocessing.py            # Standalone ETL pipeline entry point
 │   └── etl/
-│       ├── extract.py
-│       ├── transform.py
-│       ├── validate.py
-│       └── pipeline.py
+│       ├── extract.py              # CSV ingestion and required column verification
+│       ├── transform.py            # Timestamp derivation and type casting
+│       ├── validate.py             # Schema integrity and domain boundary checks
+│       └── pipeline.py             # Pipeline orchestrator and metrics aggregator
 ├── data/
-│   ├── raw/dataset.csv
+│   ├── raw/
+│   │   └── dataset.csv             # Raw sensor telemetry
 │   └── processed/
-├── frontend/app.py
-├── reports/data_quality_report.json
+│       ├── sensor_readings_clean.csv # Validated sensor readings
+│       └── rejected_records.csv    # Records rejected by validation rules
+├── frontend/
+│   └── app.py                      # Streamlit application (SQL Studio + Visual Analytics)
+├── reports/
+│   └── data_quality_report.json    # Pipeline execution metrics and quality scorecard
 ├── sql/
-│   ├── schema.sql
-│   ├── views.sql
-│   └── analytics_queries.sql
-├── .env.example
-├── .gitignore
-├── requirements.txt
-└── README.md
+│   ├── schema.sql                  # MySQL table definitions, constraints, and indexes
+│   ├── views.sql                   # Operational database views (summary, daily, anomalies)
+│   └── analytics_queries.sql       # Window functions, CTEs, and operational SQL queries
+├── .env.example                    # Database environment variable template
+├── .gitignore                      # Git exclusion rules (credentials, caches, virtualenvs)
+├── requirements.txt                # Python package dependencies
+└── README.md                       # Project documentation
 ```
 
-## Dataset
+---
 
-The included raw dataset contains 201 sensor records, 24 unique sensor IDs, temperature and humidity measurements, states, and timestamps. The ETL pipeline derives a normalized timestamp and removes structurally invalid/duplicate records without inventing missing values.
+## Getting Started
 
-## Actual ETL result
+### 1. Prerequisites
 
-Run:
+- **Python**: 3.10 or higher
+- **MySQL Server**: 8.0 or higher
+
+### 2. Environment Setup
+
+Clone the repository and install the required dependencies:
 
 ```bash
-python backend/preprocessing.py
+git clone https://github.com/dhruv-rathi-tech/sensor-data-analytics.git
+cd sensor-data-analytics
+python -m pip install -r requirements.txt
 ```
 
-The pipeline writes:
+### 3. Database Configuration
 
-- `data/processed/sensor_readings_clean.csv`
-- `data/processed/rejected_records.csv`
-- `reports/data_quality_report.json`
+Copy `.env.example` to `.env` and provide your MySQL connection parameters:
 
-The quality report is generated from the current dataset; it should be rerun whenever the raw data changes.
+```bash
+cp .env.example .env
+```
 
-## MySQL setup
+Configure your `.env` file:
 
-Create the database and schema with `sql/schema.sql`, then configure environment variables using `.env.example`:
-
-```text
+```env
 MYSQL_HOST=localhost
 MYSQL_PORT=3306
 MYSQL_USER=root
@@ -90,31 +127,40 @@ MYSQL_PASSWORD=your_password
 MYSQL_DATABASE=sensorlens_db
 ```
 
+Create the schema and views in MySQL:
 
-To load cleaned data into MySQL from Python:
-
-```python
-from backend.database import load_to_mysql
-load_to_mysql("data/processed/sensor_readings_clean.csv")
+```bash
+mysql -u root -p sensorlens_db < sql/schema.sql
+mysql -u root -p sensorlens_db < sql/views.sql
 ```
 
-## Advanced SQL
+---
 
-`sql/analytics_queries.sql` contains examples of:
+## Pipeline Execution
 
-- CTEs
-- subqueries
-- joins
-- `CASE`
-- `ROW_NUMBER` / `RANK` / `DENSE_RANK`
-- `LAG`
-- running counts with window frames
-- grouped analytics
-- anomaly classification
+### 1. Run Data Validation & Cleansing (ETL)
 
-`sql/views.sql` contains reusable reporting views for sensor summaries, daily metrics, and anomalies.
+Execute the pipeline to process raw records, enforce validation, and generate data quality reports:
 
-## Dashboard
+```bash
+python backend/preprocessing.py
+```
+
+- **Clean records output**: `data/processed/sensor_readings_clean.csv`
+- **Audit trail output**: `data/processed/rejected_records.csv`
+- **Quality metrics**: `reports/data_quality_report.json`
+
+### 2. Populate MySQL Database
+
+Load the validated dataset into MySQL:
+
+```bash
+python -c "from backend.database import load_to_mysql; load_to_mysql('data/processed/sensor_readings_clean.csv')"
+```
+
+---
+
+## Launching the Dashboard
 
 Start the Streamlit application:
 
@@ -122,15 +168,22 @@ Start the Streamlit application:
 streamlit run frontend/app.py
 ```
 
-Dashboard features:
+Access the dashboard in your browser at `http://localhost:8501`.
 
-- Reading count
-- Sensor count
-- Average temperature and humidity
-- Rule-based anomaly count
-- Sensor/date/state filters
-- Temperature and humidity trends
-- Sensor activity ranking
-- State distribution
-- Data-quality metrics
-- Filtered-data CSV export
+### Platform Modules:
+1. **SQL Query Console**: Interactive query editor with syntax execution against MySQL tables (`processed_data`, `sensors`, `sensor_readings`, etc.), execution latency reporting, and CSV data export.
+2. **Visual Analytics & Trends**: High-level KPIs, temperature and humidity time-series trends, sensor utilization distribution, operational state breakdown, and rule-based anomaly detection.
+3. **Data Quality Audit**: Summary of source records, validation rule failure counts, and an interactive inspector for rejected data entries.
+
+---
+
+## Data Quality Assurance
+
+The ingestion pipeline audits raw telemetry data for structural anomalies:
+
+- **Source Telemetry Records**: 201
+- **Validated Clean Records**: 148
+- **Rejected Records**: 53
+- **Data Quality Score**: **73.63%**
+
+**Rejection Reason**: The raw sensor stream contains 53 rows with corrupted, unmapped trailing column data. Rather than silently dropping or fabricating data, SensorLens segregates these rows into `rejected_records.csv` for audit compliance.

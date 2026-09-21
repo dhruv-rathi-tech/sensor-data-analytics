@@ -153,11 +153,10 @@ with st.sidebar:
     st.header("📊 Visual Filters")
     selected_sensors = st.multiselect("Sensor", sorted(df["Sensor_ID"].unique()), key="filter_sensors")
     selected_states = st.multiselect("State", sorted(df["State"].unique()), key="filter_states")
-    min_date, max_date = df["timestamp"].min().date(), df["timestamp"].max().date()
-    date_range = st.date_input("Date range", (min_date, max_date), min_value=min_date, max_value=max_date)
 
 
 # --- MAIN INTERFACE: TABS ---
+
 tab_sql, tab_analytics, tab_quality = st.tabs([
     "💻 SQL Query Console",
     "📊 Visual Analytics & Trends",
@@ -215,11 +214,9 @@ with tab_analytics:
         filtered = filtered[filtered.Sensor_ID.isin(selected_sensors)]
     if selected_states:
         filtered = filtered[filtered.State.isin(selected_states)]
-    if isinstance(date_range, tuple) and len(date_range) == 2:
-        start, end = pd.Timestamp(date_range[0]), pd.Timestamp(date_range[1]) + pd.Timedelta(days=1)
-        filtered = filtered[(filtered.timestamp >= start) & (filtered.timestamp < end)]
 
     anomalies = filtered[(filtered.Temp < 10) | (filtered.Temp > 35) | (filtered.Humidity < 30) | (filtered.Humidity > 70)]
+
 
     k1, k2, k3, k4, k5 = st.columns(5)
     k1.metric("Readings", f"{len(filtered):,}")
