@@ -134,4 +134,3 @@ Dashboard features:
 - State distribution
 - Data-quality metrics
 - Filtered-data CSV export
-

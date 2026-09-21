@@ -7,12 +7,14 @@ SENSOR_PATTERN = re.compile(r"^[A-Z]\d{2}$")
 
 def validate(df: pd.DataFrame):
     checks = {
+        "extraneous_column_data": df["has_extraneous_columns"] if "has_extraneous_columns" in df.columns else pd.Series(False, index=df.index),
         "missing_required_values": df[["Sensor_ID", "State", "Temp", "Humidity", "timestamp"]].isna().any(axis=1),
         "invalid_sensor_id": ~df["Sensor_ID"].fillna("").map(lambda x: bool(SENSOR_PATTERN.match(str(x)))),
         "invalid_state": ~df["State"].fillna("").isin(VALID_STATES),
         "temperature_out_of_range": (df["Temp"] < -20) | (df["Temp"] > 80),
         "humidity_out_of_range": (df["Humidity"] < 0) | (df["Humidity"] > 100),
     }
+
     reason = pd.Series("", index=df.index, dtype="string")
     for name, mask in checks.items():
         reason = reason.mask(mask & (reason == ""), name)

@@ -20,10 +20,17 @@ def run_pipeline():
     duplicates_removed = before_dedup - len(transformed)
     valid, rejected, checks = validate(transformed)
 
+    # Clean temporary helper columns from output
+    if "has_extraneous_columns" in valid.columns:
+        valid = valid.drop(columns=["has_extraneous_columns"])
+    if "has_extraneous_columns" in rejected.columns:
+        rejected = rejected.drop(columns=["has_extraneous_columns"])
+
     # Stable business-friendly ordering.
     valid = valid.sort_values("timestamp").reset_index(drop=True)
     valid.to_csv(PROCESSED, index=False)
     rejected.to_csv(REJECTED, index=False)
+
 
     quality = {
         "source_records": int(len(raw)),

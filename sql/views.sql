@@ -25,3 +25,14 @@ SELECT reading_id, sensor_id, reading_ts, state, temperature, humidity,
             ELSE 'NORMAL' END anomaly_type
 FROM sensor_readings
 WHERE temperature < 10 OR temperature > 35 OR humidity < 30 OR humidity > 70;
+
+CREATE OR REPLACE VIEW processed_data AS
+SELECT
+    DATE_FORMAT(reading_ts, '%y-%m-%d') AS Date_Col,
+    DATE_FORMAT(reading_ts, '%H:%i:%s.%f') AS Time_Col,
+    sensor_id AS Sensor_ID,
+    state AS State,
+    temperature AS Temp,
+    humidity AS Humidity
+FROM sensor_readings;
+
