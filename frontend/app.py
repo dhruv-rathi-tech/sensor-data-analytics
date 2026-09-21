@@ -106,11 +106,9 @@ code, pre, .stCodeBlock {
 </style>
 
 <div class="header-box">
-    <div class="project-badge">Sensor Data Analytics Platform</div>
-    <div class="project-title">📡 SensorLens</div>
-    <p class="project-sub">ETL Pipeline • MySQL Relational Analytics • Interactive Streamlit Reporting</p>
+    <div class="project-title">SensorLens</div>
+    <p class="project-sub">Sensor Data Analytics Platform</p>
 </div>
-
 
 """, unsafe_allow_html=True)
 
@@ -158,9 +156,6 @@ with st.sidebar:
     min_date, max_date = df["timestamp"].min().date(), df["timestamp"].max().date()
     date_range = st.date_input("Date range", (min_date, max_date), min_value=min_date, max_value=max_date)
 
-    st.divider()
-    st.caption("🟢 **Database**: MySQL 8.0 (`sensorlens_db`)")
-
 
 # --- MAIN INTERFACE: TABS ---
 tab_sql, tab_analytics, tab_quality = st.tabs([
@@ -173,8 +168,7 @@ tab_sql, tab_analytics, tab_quality = st.tabs([
 # TAB 1: SQL QUERY CONSOLE
 # ==========================================
 with tab_sql:
-    st.subheader("💻 Interactive SQL Query Runner")
-    st.caption("Execute direct SQL queries against the live MySQL database (`processed_data`, `sensors`, `sensor_readings`, `vw_daily_sensor_metrics`, `vw_anomalies`).")
+    st.subheader("SQL Query Runner")
 
     sql_query = st.text_area(
         "Enter Your SQL Query:",
@@ -298,5 +292,5 @@ with tab_quality:
         rej_df = pd.read_csv(rejected_file)
         st.dataframe(rej_df, use_container_width=True, hide_index=True)
         rej_csv = rej_df.to_csv(index=False).encode("utf-8")
-        st.download_button("📥 Download Rejected Records Log", rej_csv, "rejected_records.csv", "text/csv")
+        st.download_button("Download Rejected Records Log", rej_csv, "rejected_records.csv", "text/csv")
 
