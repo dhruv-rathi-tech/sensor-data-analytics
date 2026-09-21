@@ -41,25 +41,50 @@ code, pre, .stCodeBlock {
     font-family: 'JetBrains Mono', monospace !important;
 }
 
-/* Keep Deploy Button visible, hide 3-dots Menu, Toolbar, and Footer */
-#MainMenu { visibility: hidden !important; display: none !important; }
-header button[data-testid="baseButton-headerNoPadding"] { display: none !important; }
-header button[aria-label="Main menu"] { display: none !important; }
-header button[title="More options"] { display: none !important; }
-[data-testid="stHeaderActionElements"] > button:not(:has([data-testid="stDeployButton"])) { display: none !important; }
-[data-testid="stToolbar"] button:not(:has([data-testid="stDeployButton"])) { display: none !important; }
-
-[data-testid="stDeployButton"], .stDeployButton {
-    display: inline-flex !important;
-    visibility: visible !important;
-}
-
-header[data-testid="stHeader"] {
-    background: transparent !important;
+/* Hide ONLY the 3-dots Menu and Footer */
+#MainMenu,
+.stMainMenu,
+[data-testid="stMainMenu"],
+[data-testid="stMainMenuButton"] {
+    display: none !important;
+    visibility: hidden !important;
 }
 
 #stDecoration { display: none !important; }
 footer { visibility: hidden !important; display: none !important; }
+
+/* Keep Header & Deploy Button fully visible */
+header[data-testid="stHeader"] {
+    display: flex !important;
+    visibility: visible !important;
+    background: transparent !important;
+    z-index: 999999 !important;
+}
+
+[data-testid="stToolbar"],
+[data-testid="stHeaderActions"],
+[data-testid="stHeaderActionElements"] {
+    display: flex !important;
+    visibility: visible !important;
+}
+
+[data-testid="stAppDeployButton"],
+.stAppDeployButton,
+[data-testid="stDeployButton"],
+.stDeployButton {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+[data-testid="stAppDeployButton"] button,
+.stAppDeployButton button,
+[data-testid="stDeployButton"] button,
+.stDeployButton button {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
 
 /* Top Spacing */
 .block-container {
