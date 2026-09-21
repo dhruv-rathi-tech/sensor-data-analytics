@@ -31,6 +31,33 @@ Advanced SQL / Views
 Streamlit Analytics Dashboard (SensorLens)
 ```
 
+## Project structure
+
+```text
+.
+├── backend/
+│   ├── database.py
+│   ├── preprocessing.py
+│   └── etl/
+│       ├── extract.py
+│       ├── transform.py
+│       ├── validate.py
+│       └── pipeline.py
+├── data/
+│   ├── raw/dataset.csv
+│   └── processed/
+├── frontend/app.py
+├── reports/data_quality_report.json
+├── sql/
+│   ├── schema.sql
+│   ├── views.sql
+│   └── analytics_queries.sql
+├── .env.example
+├── .gitignore
+├── requirements.txt
+└── README.md
+```
+
 ## Dataset
 
 The included raw dataset contains 201 sensor records, 24 unique sensor IDs, temperature and humidity measurements, states, and timestamps. The ETL pipeline derives a normalized timestamp and removes structurally invalid/duplicate records without inventing missing values.
@@ -63,7 +90,6 @@ MYSQL_PASSWORD=your_password
 MYSQL_DATABASE=sensorlens_db
 ```
 
-The repository intentionally does not contain database passwords or machine-specific paths.
 
 To load cleaned data into MySQL from Python:
 
@@ -108,35 +134,4 @@ Dashboard features:
 - State distribution
 - Data-quality metrics
 - Filtered-data CSV export
-
-## Project structure
-
-```text
-.
-├── backend/
-│   ├── database.py
-│   ├── preprocessing.py
-│   └── etl/
-│       ├── extract.py
-│       ├── transform.py
-│       ├── validate.py
-│       └── pipeline.py
-├── data/
-│   ├── raw/dataset.csv
-│   └── processed/
-├── frontend/app.py
-├── reports/data_quality_report.json
-├── sql/
-│   ├── schema.sql
-│   ├── views.sql
-│   └── analytics_queries.sql
-├── .env.example
-├── .gitignore
-├── requirements.txt
-└── README.md
-```
-
-## Interview summary
-
-> I built SensorLens, a smart-home sensor analytics platform that extracts and validates raw sensor data with Python, loads the cleaned data into a relational MySQL model, uses advanced SQL for operational analytics and anomaly classification, and exposes the results through a Streamlit dashboard.
 
